@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>✨ Luna — Manifestation Space</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Quicksand", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #d9b8f7 0%, #f3c6e0 45%, #ffe1c4 100%);
+    background-attachment: fixed;
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Decorative twinkling stars scattered across the cosmic background */
+  .star {
+    position: absolute;
+    color: #fff8e7;
+    text-shadow: 0 0 8px #ffe9a8;
+    pointer-events: none;
+    user-select: none;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.25; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.25); }
+  }
+
+  #app {
+    width: 100%;
+    max-width: 640px;
+    height: calc(100vh - 48px);
+    margin: 24px;
+    display: flex;
+    flex-direction: column;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px);
+    border-radius: 28px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 12px 40px rgba(123, 47, 247, 0.25);
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    padding: 22px 16px 16px;
+    text-align: center;
+    border-bottom: 1px solid rgba(216, 180, 254, 0.5);
+  }
+
+  header h1 {
+    font-family: "Playfair Display", serif;
+    font-style: italic;
+    font-size: 28px;
+    margin: 0;
+    background: linear-gradient(90deg, #9b5de5, #f15bb5, #d4a017);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  header p {
+    margin: 4px 0 10px;
+    font-size: 13px;
+    font-style: italic;
+    color: #8a5fae;
+    letter-spacing: 0.3px;
+  }
+
+  header button {
+    font-family: "Quicksand", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 0.4px;
+    padding: 7px 18px;
+    border: none;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #c77dff, #ffafcc);
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(199, 125, 255, 0.45);
+  }
+
+  header button:hover {
+    filter: brightness(1.08);
+  }
+
+  #messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bubble {
+    max-width: 75%;
+    padding: 11px 16px;
+    border-radius: 16px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    font-size: 15px;
+  }
+
+  .bubble.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #9b5de5, #f15bb5);
+    color: white;
+    box-shadow: 0 3px 10px rgba(155, 93, 229, 0.35);
+  }
+
+  .bubble.assistant {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ffd6a5;
+    color: #4a3b6b;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  .bubble.system {
+    align-self: center;
+    color: #a07cc7;
+    font-size: 13px;
+    font-style: italic;
+  }
+
+  #input-row {
+    display: flex;
+    padding: 14px;
+    border-top: 1px solid rgba(216, 180, 254, 0.5);
+    gap: 8px;
+  }
+
+  #input-row input {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 999px;
+    border: 1px solid #e0c3fc;
+    background: rgba(255, 255, 255, 0.85);
+    color: #4a3b6b;
+    font-family: "Quicksand", sans-serif;
+    font-size: 15px;
+  }
+
+  #input-row input:focus {
+    outline: none;
+    border-color: #f15bb5;
+    box-shadow: 0 0 0 3px rgba(241, 91, 181, 0.18);
+  }
+
+  #input-row input::placeholder {
+    color: #b89cd6;
+  }
+
+  #input-row button {
+    padding: 11px 22px;
+    border-radius: 999px;
+    border: none;
+    background: linear-gradient(90deg, #9b5de5, #f15bb5);
+    color: white;
+    font-family: "Quicksand", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(155, 93, 229, 0.4);
+  }
+
+  #input-row button:hover {
+    filter: brightness(1.08);
+  }
+
+  #input-row button:disabled {
+    background: #d8c7e8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
+
+  #mic-btn {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #e0c3fc;
+    color: #9b5de5;
+    font-size: 17px;
+    padding: 11px 16px;
+    border-radius: 999px;
+  }
+
+  #mic-btn.listening {
+    background: linear-gradient(90deg, #f15bb5, #d4a017);
+    color: white;
+    border-color: transparent;
+    animation: pulse 1.2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+  }
+
+  /* Scrollbar styling, purely cosmetic */
+  #messages::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  #messages::-webkit-scrollbar-thumb {
+    background: rgba(155, 93, 229, 0.3);
+    border-radius: 999px;
+  }
+</style>
+</head>
+<body>
+
+<span class="star" style="top: 6%; left: 10%; font-size: 14px; animation-delay: 0s;">✦</span>
+<span class="star" style="top: 14%; left: 85%; font-size: 18px; animation-delay: 0.6s;">✧</span>
+<span class="star" style="top: 80%; left: 6%; font-size: 16px; animation-delay: 1.2s;">✦</span>
+<span class="star" style="top: 90%; left: 88%; font-size: 14px; animation-delay: 1.8s;">✧</span>
+<span class="star" style="top: 45%; left: 4%; font-size: 12px; animation-delay: 0.9s;">✦</span>
+<span class="star" style="top: 35%; left: 93%; font-size: 16px; animation-delay: 2.1s;">✧</span>
+<span class="star" style="top: 8%; left: 50%; font-size: 12px; animation-delay: 1.5s;">✦</span>
+<span class="star" style="top: 92%; left: 45%; font-size: 14px; animation-delay: 0.3s;">✧</span>
+
+<div id="app">
+  <header>
+    <h1>✨ Luna</h1>
+    <p>your cosmic space to reflect &amp; manifest</p>
+    <button id="reset-btn">🌙 New Reading</button>
+  </header>
+
+  <div id="messages"></div>
+
+  <div id="input-row">
+    <input id="message-input" type="text" placeholder="Share what's on your heart..." autocomplete="off">
+    <button id="mic-btn" title="Speak instead of typing">🎤</button>
+    <button id="send-btn">Send</button>
+  </div>
+</div>
+
+<script>
+  // Relative path: this page is now served BY the backend itself (see
+  // app.mount(...) in main.py), so "same origin" is always true.
+  const API_URL = "/chat";
+
+  let conversationId = null;
+  // Tracks whether the message currently being sent came from the mic
+  // (speech) or the keyboard (text) — decides whether the reply gets spoken.
+  let lastInputWasVoice = false;
+
+  const messagesEl = document.getElementById("messages");
+  const inputEl = document.getElementById("message-input");
+  const sendBtn = document.getElementById("send-btn");
+  const resetBtn = document.getElementById("reset-btn");
+  const micBtn = document.getElementById("mic-btn");
+
+  function addBubble(text, role) {
+    const bubble = document.createElement("div");
+    bubble.className = "bubble " + role;
+    bubble.textContent = text;
+    messagesEl.appendChild(bubble);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return bubble;
+  }
+
+  async function sendMessage(fromVoice = false) {
+    const text = inputEl.value.trim();
+    if (!text) return;
+
+    lastInputWasVoice = fromVoice;
+
+    addBubble(text, "user");
+    inputEl.value = "";
+    inputEl.disabled = true;
+    sendBtn.disabled = true;
+
+    const thinkingBubble = addBubble("...", "assistant");
+
+    try {
+      const response = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: text,
+          conversation_id: conversationId,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Server responded with " + response.status);
+      }
+
+      const data = await response.json();
+      conversationId = data.conversation_id;
+      thinkingBubble.textContent = data.reply;
+
+      // Only speak the reply if THIS turn's input came from the mic.
+      // Typed messages always get a text-only reply.
+      if (lastInputWasVoice) {
+        speak(data.reply);
+      }
+    } catch (err) {
+      thinkingBubble.textContent = "Something went wrong: " + err.message;
+      thinkingBubble.classList.add("system");
+    } finally {
+      inputEl.disabled = false;
+      sendBtn.disabled = false;
+      inputEl.focus();
+    }
+  }
+
+  // --- Text-to-speech (spoken replies) ---
+  // Generated server-side by the /speak endpoint (a free neural voice via
+  // edge-tts) instead of the browser's built-in (more robotic) voices.
+
+  const TTS_URL = "/speak";
+  let currentAudio = null;
+
+  async function speak(text) {
+    if (currentAudio) {
+      currentAudio.pause(); // stop any reply still being read aloud
+    }
+    try {
+      const response = await fetch(TTS_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+
+      if (!response.ok) {
+        throw new Error("TTS server responded with " + response.status);
+      }
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      currentAudio = new Audio(audioUrl);
+      currentAudio.onended = () => URL.revokeObjectURL(audioUrl);
+      await currentAudio.play();
+    } catch (err) {
+      // The text reply is already shown either way — losing audio isn't
+      // fatal, but the user should know why it stayed silent.
+      addBubble("Couldn't play the spoken reply: " + err.message, "system");
+    }
+  }
+
+  // --- Speech-to-text (mic input) ---
+
+  const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognitionAPI) {
+    // Not supported in this browser (e.g. Firefox) — hide the mic button
+    // entirely rather than show one that doesn't work.
+    micBtn.style.display = "none";
+  } else {
+    const recognition = new SpeechRecognitionAPI();
+    recognition.lang = "en-US";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    let isListening = false;
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      inputEl.value = transcript;
+      sendMessage(true); // true = this message came from speech
+    };
+
+    recognition.onerror = (event) => {
+      addBubble("Couldn't hear you (" + event.error + "). Try again or type instead.", "system");
+    };
+
+    recognition.onend = () => {
+      isListening = false;
+      micBtn.classList.remove("listening");
+    };
+
+    micBtn.addEventListener("click", () => {
+      if (isListening) {
+        recognition.stop();
+        return;
+      }
+      isListening = true;
+      micBtn.classList.add("listening");
+      recognition.start();
+    });
+  }
+
+  function resetConversation() {
+    conversationId = null;
+    messagesEl.innerHTML = "";
+    addBubble("✨ A new reading begins.", "system");
+  }
+
+  sendBtn.addEventListener("click", () => sendMessage());
+  resetBtn.addEventListener("click", resetConversation);
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+
+  resetConversation();
+</script>
+
+</body>
+</html>
