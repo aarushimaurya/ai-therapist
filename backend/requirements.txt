@@ -4,3 +4,4 @@ groq
 edge-tts
 python-dotenv
 pydantic
+requests
