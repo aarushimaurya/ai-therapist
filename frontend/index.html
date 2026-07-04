@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Luna</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -24,6 +25,7 @@
     width: 100%;
     max-width: 600px;
     height: calc(100vh - 48px);
+    height: calc(100dvh - 48px);
     margin: 24px;
     display: flex;
     flex-direction: column;
@@ -32,6 +34,21 @@
     border: 1px solid #e7e2d8;
     box-shadow: 0 8px 28px rgba(60, 55, 45, 0.08);
     overflow: hidden;
+  }
+
+  @media (max-width: 640px) {
+    body {
+      align-items: stretch;
+    }
+
+    #app {
+      max-width: none;
+      height: 100vh;
+      height: 100dvh;
+      margin: 0;
+      border-radius: 0;
+      border: none;
+    }
   }
 
   header {
@@ -142,13 +159,14 @@
 
   #input-row input {
     flex: 1;
+    min-width: 0;
     padding: 11px 16px;
     border-radius: 999px;
     border: 1px solid #e2ddd0;
     background: #fbfaf6;
     color: #3f3c35;
     font-family: "Inter", sans-serif;
-    font-size: 15px;
+    font-size: 16px;
   }
 
   #input-row input:focus {
