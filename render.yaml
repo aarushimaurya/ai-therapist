@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: luna-ai-therapist
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
